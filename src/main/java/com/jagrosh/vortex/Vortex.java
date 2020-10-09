@@ -144,6 +144,8 @@ public class Vortex
                             new PrefixCmd(this),
                             new SettingsCmd(this),
 
+                            new WhitelistInvitesCmd(this),
+
                             // Automoderation
                             new AntiinviteCmd(this),
                             new AnticopypastaCmd(this),

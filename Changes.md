@@ -3,6 +3,7 @@
 - Changed the prefix to `>`.
 - Added import command, that allows to import all settings from Vortex using 
 the export command.
+- Enabled whitelist command.
 - Modified premium command, so it doesn't require a guild id & will pick the 
 current server as default.
 - Modified the about & invite commands.
