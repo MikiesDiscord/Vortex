@@ -176,9 +176,24 @@ public class PunishmentManager extends DataManager
     public JSONObject getAllPunishmentsJson(Guild guild)
     {
         JSONObject obj = new JSONObject();
-        getAllPunishments(guild).forEach(p -> obj.put(Integer.toString(p.numStrikes), 
+        getAllPunishments(guild).forEach(p -> obj.put(Integer.toString(p.numStrikes),
                 new JSONObject().put("action", p.action.toString()).put("time", p.time)));
         return obj;
+    }
+
+    public void setAllPunishmentsJson(Guild guild, JSONObject json)
+    {
+        // remove all current punishments first
+        getAllPunishments(guild).stream().map(x -> x.numStrikes).forEach(strike -> removeAction(guild, strike));
+
+        json.keySet().forEach(strikes -> {
+            JSONObject action = json.getJSONObject(strikes);
+            setAction(guild,
+                    Integer.parseInt(strikes),
+                    action.getEnum(Action.class, "action"),
+                    action.getInt("time")
+            );
+        });
     }
     
     public class Punishment

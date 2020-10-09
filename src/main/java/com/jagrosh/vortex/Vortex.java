@@ -107,6 +107,7 @@ public class Vortex
                         .addCommands(
                             // General
                             new AboutCmd(),
+                            new ChangesCmd(),
                             new InviteCmd(),
                             new PingCommand(),
                             new RoleinfoCmd(),
@@ -159,7 +160,6 @@ public class Vortex
                             new UnignoreCmd(this),
                             
                             // Tools
-                            new AnnounceCmd(),
                             new AuditCmd(),
                             new DehoistCmd(),
                             new ExportCmd(this),
@@ -170,7 +170,8 @@ public class Vortex
                             new EvalCmd(this),
                             new DebugCmd(this),
                             new PremiumCmd(this),
-                            new ReloadCmd(this)
+                            new ReloadCmd(this),
+                            new ImportCmd(this)
                             //new TransferCmd(this)
                         )
                         .setHelpConsumer(event -> event.replyInDm(FormatUtil.formatHelp(event, this), m -> 
@@ -199,7 +200,7 @@ public class Vortex
         modlog.start();
         
         threadpool.scheduleWithFixedDelay(() -> cleanPremium(), 0, 2, TimeUnit.HOURS);
-        threadpool.scheduleWithFixedDelay(() -> leavePointlessGuilds(), 5, 30, TimeUnit.MINUTES);
+        //threadpool.scheduleWithFixedDelay(() -> leavePointlessGuilds(), 5, 30, TimeUnit.MINUTES);
         threadpool.scheduleWithFixedDelay(() -> System.gc(), 12, 6, TimeUnit.HOURS);
     }
     

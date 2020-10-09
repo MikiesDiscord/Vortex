@@ -37,7 +37,7 @@ public class PremiumCmd extends Command
         this.vortex = vortex;
         this.name = "premium";
         this.help = "gives premium";
-        this.arguments = "<guildId> <time>";
+        this.arguments = "<time> [guild id]";
         this.ownerCommand = true;
         this.guildOnly = false;
         this.hidden = true;
@@ -47,30 +47,39 @@ public class PremiumCmd extends Command
     protected void execute(CommandEvent event)
     {
         String[] parts = event.getArgs().split("\\s+", 2);
-        if(parts.length < 2)
+        if(parts.length == 0)
         {
             event.replyError("Too few arguments");
             return;
         }
-        int seconds = OtherUtil.parseTime(parts[1]);
-        if(seconds == 0)
+
+        int seconds = OtherUtil.parseTime(parts[0]);
+        if (seconds == 0)
         {
             event.replyError("Invalid time");
             return;
         }
+
+        long guildId;
+        if(parts.length > 1)
+            guildId = Long.parseLong(parts[1]);
+        else
+            guildId = event.getGuild().getIdLong();
+
+
         Guild guild;
         try
         {
-            guild = vortex.getShardManager().getGuildById(Long.parseLong(parts[0]));
+            guild = vortex.getShardManager().getGuildById(guildId);
         }
-        catch(NumberFormatException ex)
+        catch (NumberFormatException ex)
         {
-            event.replyError("Invalid guild ID");
+            event.replyError("Invalid guild");
             return;
         }
-        if(guild == null)
+        if (guild == null)
         {
-            event.replyError("No guild found with ID `" + parts[0] + "`");
+            event.replyError("Guild `" + guildId + "` not found");
             return;
         }
         PremiumInfo before = vortex.getDatabase().premium.getPremiumInfo(guild);

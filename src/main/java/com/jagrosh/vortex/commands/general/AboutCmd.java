@@ -49,8 +49,8 @@ public class AboutCmd extends Command
                 .setContent(Constants.VORTEX_EMOJI + " **All about Vortex** " + Constants.VORTEX_EMOJI)
                 .setEmbed(new EmbedBuilder()
                         .setColor(event.getGuild()==null ? Color.GRAY : event.getSelfMember().getColor())
-                        .setDescription("Hello, I am **Vortex**#8540, a bot designed to keep your server safe and make moderating fast and easy!\n"
-                                + "I was written in Java by **jagrosh**#4824 using [JDA](" + JDAInfo.GITHUB + ") and [JDA-Utilities](" + JDAUtilitiesInfo.GITHUB + ")\n"
+                        .setDescription("Hello, I am **Catili Vortex**#7030, a bot designed to keep your server safe and make moderating fast and easy!\n"
+                                + "I am a fork by **Michaili**#1379, originally written in Java by **jagrosh**#4824 using [JDA](" + JDAInfo.GITHUB + ") and [JDA-Utilities](" + JDAUtilitiesInfo.GITHUB + ")\n"
                                 + "Type `" + event.getClient().getPrefix() + event.getClient().getHelpWord() + "` for help and information.\n\n"
                                 + FormatUtil.helpLinks(event))
                         .addField("Stats", sm.getShardsTotal()+ " Shards\n" + sm.getGuildCache().size() + " Servers", true)

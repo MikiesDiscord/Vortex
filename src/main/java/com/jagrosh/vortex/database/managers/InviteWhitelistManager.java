@@ -7,19 +7,14 @@ import com.jagrosh.easysql.columns.LongColumn;
 import com.jagrosh.vortex.Constants;
 import com.jagrosh.vortex.utils.FixedCache;
 import net.dv8tion.jda.core.entities.Guild;
+import org.json.JSONArray;
 import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.json.JSONArray;
 
 public class InviteWhitelistManager extends DataManager
 {
@@ -139,6 +134,14 @@ public class InviteWhitelistManager extends DataManager
         JSONArray arr = new JSONArray();
         list.forEach(id -> arr.put(id));
         return arr;
+    }
+
+    public void setWhiteListJson(Guild guild, JSONArray json)
+    {
+        // remove all entries on whitelist first
+        removeAllFromWhitelist(guild, readWhitelist(guild));
+
+        addAllToWhitelist(guild, json.toList().stream().map(x -> (long) x).collect(Collectors.toList()));
     }
 
     private void invalidateCache(Guild guild)

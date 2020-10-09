@@ -302,8 +302,8 @@ public class FormatUtil {
     public static String helpLinks(CommandEvent event)
     {
         return "\uD83D\uDD17 ["+event.getSelfUser().getName()+" Wiki]("+Constants.Wiki.WIKI_BASE+")\n" // 🔗
-                + "<:discord:314003252830011395> [Support Server]("+event.getClient().getServerInvite()+")\n"
+                + "<:discord:764126906034552842> [Support Server]("+event.getClient().getServerInvite()+")\n"
                 +  CMD_EMOJI + " [Full Command Reference]("+Constants.Wiki.COMMANDS+")\n"
-                + "<:patreon:417455429145329665> [Donations]("+Constants.DONATION_LINK+")";
+                + "<:patreon:764127433849831425> [Donations]("+Constants.DONATION_LINK+") (jagrosh's Patreon)";
     }
 }
