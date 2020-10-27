@@ -275,7 +275,7 @@ public class BasicLogger
         TextChannel tc = vortex.getDatabase().settings.getSettings(event.getGuild()).getVoiceLogChannel(event.getGuild());
         if(tc==null)
             return;
-        log(OffsetDateTime.now(), tc, "<:voicejoin:314044543605407757>", FormatUtil.formatFullUser(event.getMember().getUser())
+        log(OffsetDateTime.now(), tc, "<:voicejoin:770310301245505626>", FormatUtil.formatFullUser(event.getMember().getUser())
                 +" has joined voice channel _"+event.getChannelJoined().getName()+"_", null);
     }
     
@@ -284,7 +284,7 @@ public class BasicLogger
         TextChannel tc = vortex.getDatabase().settings.getSettings(event.getGuild()).getVoiceLogChannel(event.getGuild());
         if(tc==null)
             return;
-        log(OffsetDateTime.now(), tc, "<:voicechange:314043907992190987>", FormatUtil.formatFullUser(event.getMember().getUser())
+        log(OffsetDateTime.now(), tc, "<:voicechange:770310421655322624>", FormatUtil.formatFullUser(event.getMember().getUser())
                 +" has moved voice channels from _"+event.getChannelLeft().getName()+"_ to _"+event.getChannelJoined().getName()+"_", null);
     }
     
@@ -293,7 +293,7 @@ public class BasicLogger
         TextChannel tc = vortex.getDatabase().settings.getSettings(event.getGuild()).getVoiceLogChannel(event.getGuild());
         if(tc==null)
             return;
-        log(OffsetDateTime.now(), tc, "<:voiceleave:314044543609864193>", FormatUtil.formatFullUser(event.getMember().getUser())
+        log(OffsetDateTime.now(), tc, "<:voiceleave:770310520242307132>", FormatUtil.formatFullUser(event.getMember().getUser())
                 +" has left voice channel _"+event.getChannelLeft().getName()+"_", null);
     }
     
