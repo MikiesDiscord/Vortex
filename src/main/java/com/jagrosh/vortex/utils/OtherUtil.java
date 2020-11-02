@@ -140,20 +140,20 @@ public class OtherUtil
     {
         switch(flag)
         {
-            case BUG_HUNTER_LEVEL_1:   return "<:bughunter:585765206769139723>";
-            case BUG_HUNTER_LEVEL_2:   return "<:bughunter:585765206769139723>";
-            case EARLY_SUPPORTER:      return "<:supporter:585763690868113455>";
-            case HYPESQUAD:            return "<:hypesquad_events:585765895939424258>";
-            case HYPESQUAD_BALANCE:    return "<:balance:585763004574859273>";
-            case HYPESQUAD_BRAVERY:    return "<:bravery:585763004218343426>";
-            case HYPESQUAD_BRILLIANCE: return "<:brilliance:585763004495298575>";
-            case PARTNER:              return "<:partner:314068430556758017>";
-            case STAFF:                return "<:staff:314068430787706880>";
-            case SYSTEM:               return "<:system:738519297265106954>";
+            case BUG_HUNTER_LEVEL_1:   return "<:bughunter:772924387950592010>";
+            case BUG_HUNTER_LEVEL_2:   return "<:bughunter:772924387950592010>";
+            case EARLY_SUPPORTER:      return "<:supporter:772924474940194837>";
+            case HYPESQUAD:            return "<:hypesquadevents:772925711115616306>";
+            case HYPESQUAD_BALANCE:    return "<:balance:772926267900428288>";
+            case HYPESQUAD_BRAVERY:    return "<:bravery:772926267896627200>";
+            case HYPESQUAD_BRILLIANCE: return "<:brilliance:772926267829125150>";
+            case PARTNER:              return "<:partner:772926892885671957>";
+            case STAFF:                return "<:staff:772927069394960434>";
+            case SYSTEM:               return "<:system:772927134771314708>";
             case TEAM_USER:            return "\u2753";
             case UNKNOWN:              return "\u2753";
-            case VERIFIED_BOT:         return "<:verified_bot:738519297265238057>";
-            case VERIFIED_DEVELOPER:   return "<:badgeVerifiedDev:698313392728834049>";
+            case VERIFIED_BOT:         return "<:verifiedbot:772927379903348746>";
+            case VERIFIED_DEVELOPER:   return "<:verifieddev:772927560962408458>";
             default:                   return "\u2753";
         }
     }
