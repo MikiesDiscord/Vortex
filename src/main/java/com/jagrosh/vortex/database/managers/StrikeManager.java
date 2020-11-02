@@ -124,4 +124,13 @@ public class StrikeManager extends DataManager
 
         json.keySet().forEach(id -> addStrikes(guild, Long.parseLong(id), json.getInt(id)));
     }
+
+    public void resetAllStrikes(Guild guild)
+    {
+        readWrite(selectAll(GUILD_ID.is(guild.getIdLong())), rs ->
+        {
+            while(rs.next())
+                rs.deleteRow();
+        });
+    }
 }
