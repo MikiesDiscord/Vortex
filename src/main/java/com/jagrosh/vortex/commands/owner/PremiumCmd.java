@@ -53,8 +53,8 @@ public class PremiumCmd extends Command
             return;
         }
 
-        int seconds = OtherUtil.parseTime(parts[0]);
-        if (seconds == 0)
+        int seconds = OtherUtil.parseTime(parts[1]);
+        if(seconds <= 0)
         {
             event.replyError("Invalid time");
             return;
@@ -72,7 +72,7 @@ public class PremiumCmd extends Command
         {
             guild = vortex.getShardManager().getGuildById(guildId);
         }
-        catch (NumberFormatException ex)
+        catch(NumberFormatException ex)
         {
             event.replyError("Invalid guild");
             return;
