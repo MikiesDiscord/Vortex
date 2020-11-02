@@ -21,11 +21,15 @@ import com.jagrosh.easysql.SQLColumn;
 import com.jagrosh.easysql.columns.InstantColumn;
 import com.jagrosh.easysql.columns.LongColumn;
 import com.jagrosh.vortex.utils.Pair;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import org.json.JSONObject;
 
 import java.time.Instant;
@@ -73,7 +77,7 @@ public class TempMuteManager extends DataManager
                         Instant.ofEpochSecond(json.getLong(userId)))
         );
     }
-    
+
     public boolean isMuted(Member member)
     {
         return read(selectAll(GUILD_ID.is(member.getGuild().getId())+" AND "+USER_ID.is(member.getUser().getId())+" AND "+FINISH.isGreaterThan(Instant.now().getEpochSecond())), 
@@ -117,7 +121,7 @@ public class TempMuteManager extends DataManager
             return arr;
         });
     }
-    
+
     public void overrideMute(Guild guild, long userId, Instant finish)
     {
         readWrite(selectAll(GUILD_ID.is(guild.getId())+" AND "+USER_ID.is(userId)), rs -> 
@@ -180,7 +184,7 @@ public class TempMuteManager extends DataManager
                 }
                 Member m = g.getMemberById(USER_ID.getValue(rs));
                 if(m!=null && m.getRoles().contains(mRole))
-                    g.getController().removeSingleRoleFromMember(m, mRole).reason("Temporary Mute Completed").queue();
+                    g.removeRoleFromMember(m, mRole).reason("Temporary Mute Completed").queue();
                 rs.deleteRow();
             }
         });

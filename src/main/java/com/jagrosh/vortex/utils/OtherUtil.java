@@ -22,6 +22,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
@@ -59,7 +62,7 @@ public class OtherUtil
                 break;
             }
         }
-        m.getGuild().getController().setNickname(m, newname).reason("Dehoisting").queue();
+        m.modifyNickname(newname).reason("Dehoisting").queue();
         return true;
     }
     
