@@ -7,7 +7,6 @@ import com.jagrosh.easysql.columns.LongColumn;
 import com.jagrosh.vortex.Constants;
 import com.jagrosh.vortex.utils.FixedCache;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.core.entities.Guild;
 import org.json.JSONArray;
 import org.slf4j.LoggerFactory;
 

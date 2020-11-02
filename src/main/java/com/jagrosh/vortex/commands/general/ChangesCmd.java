@@ -17,9 +17,8 @@ package com.jagrosh.vortex.commands.general;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 import java.awt.*;
 
@@ -40,11 +39,9 @@ public class ChangesCmd extends Command
     @Override
     protected void execute(CommandEvent event)
     {
-        event.reply(new MessageBuilder()
-                .setEmbed(new EmbedBuilder()
+        event.reply(new EmbedBuilder()
                         .setColor(event.getGuild()==null ? Color.GRAY : event.getSelfMember().getColor())
                         .setDescription("The difference between this bot and jagrosh's bot can be found [here](https://github.com/MichailiK/Vortex/blob/master/Changes.md)\n")
-                        .build())
-                .build());
+                        .build());
     }
 }
