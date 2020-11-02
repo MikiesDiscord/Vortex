@@ -38,7 +38,7 @@ import net.dv8tion.jda.api.entities.User;
  */
 public class UserinfoCmd extends Command
 {
-    private final static String BOT_EMOJI = "<:botTag:230105988211015680>";
+    private final static String BOT_EMOJI = "<:botTag:772922568197799946>";
     private final static String USER_EMOJI = "\uD83D\uDC64"; // 👤
     private final static String LINESTART = "\u25AB"; // ▫
     
@@ -135,13 +135,13 @@ public class UserinfoCmd extends Command
     {
         Activity game = games.isEmpty() ? null : games.get(0);
         if(game!=null && game.getType()==Activity.ActivityType.STREAMING && game.getUrl()!=null && Activity.isValidStreamingUrl(game.getUrl()))
-            return "<:streaming:313956277132853248>";
+            return "<:streaming:772923103202115627>";
         switch(status) {
-            case ONLINE: return "<:online:313956277808005120>";
-            case IDLE: return "<:away:313956277220802560>";
-            case DO_NOT_DISTURB: return "<:dnd:313956276893646850>";
-            case INVISIBLE: return "<:invisible:313956277107556352>";
-            case OFFLINE: return "<:offline:313956277237710868>";
+            case ONLINE: return "<:online:772923250946605067>";
+            case IDLE: return "<:away:772923307229970502>";
+            case DO_NOT_DISTURB: return "<:dnd:772923646892965889>";
+            case INVISIBLE: return "<:invisible:772923644825436211>";
+            case OFFLINE: return "<:offline:772923645072506900>";
             default: return "";
         }
     }
