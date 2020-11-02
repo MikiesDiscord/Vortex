@@ -48,12 +48,15 @@ public class PremiumCmd extends Command
     @Override
     protected void execute(CommandEvent event)
     {
-        String[] parts = event.getArgs().split("\\s+", 3);
-        if(parts.length == 0)
+
+        if(event.getArgs().isEmpty())
         {
-            event.replyError("Too few arguments");
+            PremiumInfo info = vortex.getDatabase().premium.getPremiumInfo(event.getGuild());
+            event.reply("This server has " + info);
             return;
         }
+
+        String[] parts = event.getArgs().split("\\s+", 3);
 
         int seconds;
         if(parts[0].equalsIgnoreCase("forever") || parts[0].equalsIgnoreCase("infinite"))
