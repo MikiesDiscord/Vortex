@@ -212,7 +212,7 @@ public class PremiumManager extends DataManager
         @Override
         public String toString()
         {
-            return level.name + " (Until " + (until == null ? "never" 
+            return level.name + " (Until " + (until == null || until.getEpochSecond()==Instant.MAX.getEpochSecond() ? "forever"
                     : until.atZone(ZoneId.of("GMT-4")).format(DateTimeFormatter.RFC_1123_DATE_TIME)) + ")";
         }
     }

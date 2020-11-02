@@ -24,6 +24,8 @@ import com.jagrosh.vortex.utils.OtherUtil;
 import java.time.temporal.ChronoUnit;
 import net.dv8tion.jda.api.entities.Guild;
 
+import javax.swing.*;
+
 /**
  *
  * @author John Grosh (john.a.grosh@gmail.com)
@@ -37,7 +39,7 @@ public class PremiumCmd extends Command
         this.vortex = vortex;
         this.name = "premium";
         this.help = "gives premium";
-        this.arguments = "<time> [guild id]";
+        this.arguments = "<time> [type] [guild id]";
         this.ownerCommand = true;
         this.guildOnly = false;
         this.hidden = true;
@@ -46,25 +48,42 @@ public class PremiumCmd extends Command
     @Override
     protected void execute(CommandEvent event)
     {
-        String[] parts = event.getArgs().split("\\s+", 2);
+        String[] parts = event.getArgs().split("\\s+", 3);
         if(parts.length == 0)
         {
             event.replyError("Too few arguments");
             return;
         }
 
-        int seconds = OtherUtil.parseTime(parts[0]);
-        if(seconds <= 0)
+        int seconds;
+        if(parts[0].equalsIgnoreCase("forever") || parts[0].equalsIgnoreCase("infinite"))
+            seconds = Integer.MAX_VALUE;
+        else
         {
-            event.replyError("Invalid time");
-            return;
+            seconds = OtherUtil.parseTime(parts[0]);
+            if(seconds <= 0)
+            {
+                event.replyError("Invalid time");
+                return;
+            }
         }
 
-        long guildId;
+        PremiumManager.Level level = PremiumManager.Level.PRO;
         if(parts.length > 1)
-            guildId = Long.parseLong(parts[1]);
-        else
-            guildId = event.getGuild().getIdLong();
+        {
+            try
+            {
+                level = PremiumManager.Level.valueOf(parts[1].toUpperCase());
+            }
+            catch(Exception e)
+            {
+                event.reply("Invalid level");
+            }
+        }
+
+        long guildId = event.getGuild().getIdLong();
+        if(parts.length > 2)
+            guildId = Long.parseLong(parts[2]);
 
 
         Guild guild;
@@ -83,7 +102,12 @@ public class PremiumCmd extends Command
             return;
         }
         PremiumInfo before = vortex.getDatabase().premium.getPremiumInfo(guild);
-        vortex.getDatabase().premium.addPremium(guild, PremiumManager.Level.PRO, seconds, ChronoUnit.SECONDS);
+
+        if(seconds == Integer.MAX_VALUE)
+            vortex.getDatabase().premium.addPremiumForever(guild, level);
+        else
+            vortex.getDatabase().premium.addPremium(guild, level, seconds, ChronoUnit.SECONDS);
+
         PremiumInfo after = vortex.getDatabase().premium.getPremiumInfo(guild);
         event.replySuccess("Before: " + before + "\n" + event.getClient().getSuccess() + " After: " + after);
     }
