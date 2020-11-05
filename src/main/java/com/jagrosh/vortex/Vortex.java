@@ -127,6 +127,7 @@ public class Vortex
                             new StrikeCmd(this),
                             new PardonCmd(this),
                             new CheckCmd(this),
+                            new UsernameHistoryCmd(this),
                             new ReasonCmd(this),
                             new SlowmodeCmd(this),
 

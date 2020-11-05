@@ -5,6 +5,7 @@
 the export command.
 - Added reset command, which allows you to reset settings of Vortex
 - Added slowmode command, which allows to (temporarily) set slowmodes
+- Added Username History command, which allows you to see a user's past names
 - Enabled whitelist command.
 - Modified premium command
 - Modified the about & invite commands.

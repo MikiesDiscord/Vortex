@@ -36,6 +36,7 @@ public class Database extends DatabaseConnector
     public final PremiumManager premium;
     public final InviteWhitelistManager inviteWhitelist;
     public final FilterManager filters;
+    public final UsernameHistoryManager usernameHistory;
     
     public Database(String host, String user, String pass) throws Exception
     {
@@ -53,6 +54,7 @@ public class Database extends DatabaseConnector
         premium = new PremiumManager(this);
         inviteWhitelist = new InviteWhitelistManager(this);
         filters = new FilterManager(this);
+        usernameHistory = new UsernameHistoryManager(this);
         
         init();
     }

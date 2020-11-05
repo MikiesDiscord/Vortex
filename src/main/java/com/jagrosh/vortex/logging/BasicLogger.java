@@ -209,6 +209,7 @@ public class BasicLogger
     public void logNameChange(UserUpdateNameEvent event)
     {
         OffsetDateTime now = OffsetDateTime.now();
+        vortex.getDatabase().usernameHistory.addUsername(event);
         event.getUser().getMutualGuilds().stream()
             .map(guild -> vortex.getDatabase().settings.getSettings(guild).getServerLogChannel(guild))
             .filter(tc -> tc!=null)
@@ -222,6 +223,7 @@ public class BasicLogger
     public void logNameChange(UserUpdateDiscriminatorEvent event)
     {
         OffsetDateTime now = OffsetDateTime.now();
+        vortex.getDatabase().usernameHistory.addUsername(event);
         event.getUser().getMutualGuilds().stream()
             .map(guild -> vortex.getDatabase().settings.getSettings(guild).getServerLogChannel(guild))
             .filter(tc -> tc!=null)
