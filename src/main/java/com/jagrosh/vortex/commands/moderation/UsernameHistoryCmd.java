@@ -56,9 +56,9 @@ public class UsernameHistoryCmd extends ModCommand
     @Override
     protected void execute(CommandEvent event)
     {
-        if(!vortex.getDatabase().premium.getPremiumInfo(event.getGuild()).level.isAtLeast(PremiumManager.Level.ULTRA))
+        if(!vortex.getDatabase().premium.getPremiumInfo(event.getGuild()).level.isAtLeast(PremiumManager.Level.PRO))
         {
-            event.reply(PremiumManager.Level.ULTRA.getRequirementMessage());
+            event.reply(PremiumManager.Level.PRO.getRequirementMessage());
             return;
         }
         if(event.getArgs().isEmpty() || event.getArgs().equalsIgnoreCase("help"))

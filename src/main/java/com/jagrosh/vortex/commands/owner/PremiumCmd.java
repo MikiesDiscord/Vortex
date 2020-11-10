@@ -112,6 +112,21 @@ public class PremiumCmd extends Command
             vortex.getDatabase().premium.addPremium(guild, level, seconds, ChronoUnit.SECONDS);
 
         PremiumInfo after = vortex.getDatabase().premium.getPremiumInfo(guild);
+
+        if(after.level == PremiumManager.Level.NONE)
+        {
+            vortex.getDatabase().automod.setResolveUrls(guild, false);
+            vortex.getDatabase().settings.setAvatarLogChannel(guild, null);
+
+            vortex.getDatabase().settings.setVoiceLogChannel(guild, null);
+            vortex.getDatabase().filters.deleteAllFilters(guild.getIdLong());
+        }
+        else if(after.level == PremiumManager.Level.PLUS)
+        {
+            vortex.getDatabase().settings.setAvatarLogChannel(guild, null);
+            vortex.getDatabase().automod.setResolveUrls(guild, false);
+        }
+
         event.replySuccess("Before: " + before + "\n" + event.getClient().getSuccess() + " After: " + after);
     }
 }
