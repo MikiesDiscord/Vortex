@@ -71,7 +71,7 @@ public class PremiumCmd extends Command
             }
         }
 
-        PremiumManager.Level level = PremiumManager.Level.PRO;
+        PremiumManager.Level level = PremiumManager.Level.PLUS;
         if(parts.length > 1)
         {
             try
