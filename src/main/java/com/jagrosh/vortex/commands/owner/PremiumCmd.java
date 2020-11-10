@@ -123,7 +123,8 @@ public class PremiumCmd extends Command
         }
         else if(after.level == PremiumManager.Level.PLUS)
         {
-            vortex.getDatabase().settings.setAvatarLogChannel(guild, null);
+            // TODO uncomment once avatarlog overhaul is done
+            //vortex.getDatabase().settings.setAvatarLogChannel(guild, null);
             vortex.getDatabase().automod.setResolveUrls(guild, false);
         }
 
