@@ -172,7 +172,7 @@ public class PremiumManager extends DataManager
         
         public String getRequirementMessage()
         {
-            return Constants.WARNING + " Sorry, this feature requires Vortex Pro. Vortex Pro is not available yet.";
+            return Constants.WARNING + " Sorry, this feature requires "+ name + ".";
         }
     }
     
