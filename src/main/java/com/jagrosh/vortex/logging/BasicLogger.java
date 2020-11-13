@@ -327,6 +327,7 @@ public class BasicLogger
             {
                 LOG.error("Could not download new avatar of " + event.getUser().getIdLong(), e);
             }
+            vortex.getDatabase().avatarHistory.addAvatar(event.getUser().getIdLong(), now.toInstant(), newAvatarUrl);
 
             List<TextChannel> logs = event.getUser().getMutualGuilds().stream()
                     .map(guild -> vortex.getDatabase().settings.getSettings(guild).getAvatarLogChannel(guild))
@@ -336,7 +337,6 @@ public class BasicLogger
                 return;
 
             Optional<Pair<Instant, String>> oldAvatar = vortex.getDatabase().avatarHistory.getPastAvatars(event.getUser()).stream().findFirst();
-            vortex.getDatabase().avatarHistory.addAvatar(event.getUser().getIdLong(), now.toInstant(), newAvatarUrl);
 
             EmbedBuilder builder = new EmbedBuilder()
                     .setColor(Color.YELLOW);
