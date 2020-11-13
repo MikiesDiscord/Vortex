@@ -15,17 +15,17 @@
  */
 package com.jagrosh.vortex.logging;
 
+import com.jagrosh.vortex.Vortex;
 import com.typesafe.config.Config;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import net.dv8tion.jda.api.entities.User;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import javax.imageio.ImageIO;
-import net.dv8tion.jda.api.entities.User;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -33,125 +33,49 @@ import net.dv8tion.jda.api.entities.User;
  */
 public class AvatarSaver
 {
-    private final static BufferedImage NOAVATAR = loadNoAvatar();
+
+    private final static long MaxFileSize = 8_378_000;
     
     private final String userAgent;
+    private final Vortex bot;
     
-    public AvatarSaver(Config config)
+    public AvatarSaver(Config config, Vortex bot)
     {
         userAgent = config.getString("avatar-saver.user-agent");
+        this.bot = bot;
     }
-    
-    public byte[] makeAvatarImage(User user, String oldAvatarUrl, String oldAvatarId)
+
+    @Nullable
+    public String saveAvatar(User user) throws IOException, ExecutionException, InterruptedException
     {
-        BufferedImage oldimg;
-        if(oldAvatarUrl==null)
-            oldimg = imageFromUrl(user.getDefaultAvatarUrl());
-        else
+
+        if(user.getAvatarId() == null)
+            return user.getDefaultAvatarUrl();
+
+
+        for(int imageSize = 1024; imageSize > 128; imageSize /= 2)
         {
-            oldimg = imageFromId(user.getIdLong(), oldAvatarId);
-            if(oldimg==null)
-                oldimg = imageFromUrl(oldAvatarUrl);
+            URLConnection connection = new URL(user.getEffectiveAvatarUrl() + "?size=" + imageSize).openConnection();
+            connection.setRequestProperty("user-agent", userAgent);
+            connection.connect();
+
+            if(connection.getContentLengthLong() > MaxFileSize && connection.getContentLengthLong() != -1)
+                continue;
+
+            boolean isAnimated = connection.getContentType().equals("image/gif");
+
+
+            InputStream inputStream = connection.getInputStream();
+            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+            while(true)
+            {
+                int result = inputStream.read();
+                if (result == -1) break;
+                byteArray.write(result);
+            }
+            return bot.getTextUploader().uploadBytes(byteArray.toByteArray(), user.getAvatarId() + (isAnimated ? ".gif" : ".png"));
         }
-        if(oldimg==null)
-            oldimg = NOAVATAR;
-        BufferedImage newimg = imageFromUrl(user.getEffectiveAvatarUrl());
-        if(newimg == null)
-            newimg = NOAVATAR;
-        else if(user.getAvatarId()!=null) 
-            saveImageWithId(newimg, user.getIdLong(), user.getAvatarId());
-        BufferedImage combo = new BufferedImage(256,128,BufferedImage.TYPE_INT_ARGB_PRE);
-        Graphics2D g2d = combo.createGraphics();
-        g2d.setColor(Color.BLACK);
-        if(oldimg!=null)
-        {
-            g2d.drawImage(oldimg, 0, 0, 128, 128, null);
-        }
-        if(newimg!=null)
-        {
-            g2d.drawImage(newimg, 128, 0, 128, 128, null);
-        }
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream())
-        {
-            ImageIO.write(combo, "png", baos );
-            baos.flush();
-            return baos.toByteArray();
-        }
-        catch(IOException ex)
-        {
-            return null;
-        }
-        finally
-        {
-            g2d.dispose();
-        }
-    }
-    
-    public BufferedImage imageFromUrl(String url)
-    {
-        if(url==null)
-            return null;
-        try
-        {
-            URL u = new URL(url.replace(".gif", ".png"));
-            URLConnection urlConnection = u.openConnection();
-            urlConnection.setRequestProperty("user-agent", userAgent);
-            return ImageIO.read(urlConnection.getInputStream());
-        } 
-        catch(IOException|IllegalArgumentException e) 
-        {
-            return null;
-        }
-    }
-    
-    private BufferedImage imageFromId(long id, String avyId)
-    {
-        try
-        {
-            return ImageIO.read(location(id, avyId));
-        }
-        catch(IOException ex)
-        {
-            return null;
-        }
-    }
-    
-    private void saveImageWithId(BufferedImage img, long id, String avyId)
-    {
-        try
-        {
-            BufferedImage buf = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
-            buf.getGraphics().drawImage(img, 0, 0, 64, 64, null);
-            ImageIO.write(buf, "jpg", location(id, avyId));
-            buf.getGraphics().dispose();
-        }
-        catch(IOException ex) {}
-    }
-    
-    private File location(long id, String avyId)
-    {
-        String dir = "avatars" + File.separator;
-        long remainder = id;
-        for(int i=16; i>=0; i-=2)
-        {
-            dir += (remainder / (long)Math.pow(10, i)) + File.separator;
-            remainder %= (long)Math.pow(10, i);
-            File directory = new File(dir);
-            if(!directory.exists())
-                directory.mkdir();
-        }
-        return new File(dir + avyId + ".jpg");
-    }
-    
-    private static BufferedImage loadNoAvatar()
-    {
-        try
-        {
-            return ImageIO.read(new File("images"+File.separator+"NoAvatar.png"));
-        }
-        catch(IOException ex)
-        {
-            return null;
-        }
+
+        return null;
     }
 }

@@ -19,13 +19,16 @@ import com.jagrosh.vortex.Vortex;
 import com.jagrosh.vortex.logging.MessageCache.CachedMessage;
 import com.jagrosh.vortex.utils.FormatUtil;
 import com.jagrosh.vortex.utils.LogUtil;
+import com.jagrosh.vortex.utils.Pair;
 import com.jagrosh.vortex.utils.Usage;
 import com.typesafe.config.Config;
 import java.awt.Color;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -40,6 +43,8 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateAvatarEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateDiscriminatorEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -60,7 +65,9 @@ public class BasicLogger
     private final static String NEW = "\uD83C\uDD95"; // 🆕
     private final static String LEAVE = "\uD83D\uDCE4"; // 📤
     private final static String AVATAR = "\uD83D\uDDBC"; // 🖼
-    
+
+    private final static Logger LOG = LoggerFactory.getLogger("BasicLogger");
+
     private final Vortex vortex;
     private final AvatarSaver avatarSaver;
     private final Usage usage = new Usage();
@@ -68,7 +75,7 @@ public class BasicLogger
     public BasicLogger(Vortex vortex, Config config)
     {
         this.vortex = vortex;
-        this.avatarSaver = new AvatarSaver(config);
+        this.avatarSaver = new AvatarSaver(config, vortex);
     }
     
     public Usage getUsage()
@@ -317,11 +324,34 @@ public class BasicLogger
         OffsetDateTime now = OffsetDateTime.now();
         vortex.getThreadpool().execute(() -> 
         {
-            byte[] im = avatarSaver.makeAvatarImage(event.getUser(), event.getOldAvatarUrl(), event.getOldAvatarId());
-            if(im!=null)
-                logs.forEach(tc -> logFile(now, tc, AVATAR, FormatUtil.formatFullUser(event.getUser())+" has changed avatars"
-                        +(event.getUser().getAvatarId()!=null && event.getUser().getAvatarId().startsWith("a_") ? " <:gif:314068430624129039>" : "")
-                        +":", im, "AvatarChange.png"));
+            String newAvatarUrl = null;
+            try
+            {
+                 newAvatarUrl = avatarSaver.saveAvatar(event.getUser());
+            }
+            catch (Exception e)
+            {
+                LOG.error("Could not download new avatar of " + event.getUser().getIdLong(), e);
+            }
+
+            Optional<Pair<Instant, String>> oldAvatar = vortex.getDatabase().avatarHistory.getPastAvatars(event.getUser()).stream().findFirst();
+            vortex.getDatabase().avatarHistory.addAvatar(event.getUser().getIdLong(), Instant.now(), newAvatarUrl);
+
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setColor(Color.YELLOW);
+
+            if(oldAvatar.isPresent() && newAvatarUrl != null)
+                builder.setDescription("Old avatar:\n\n\n\nNew avatar:")
+                       .setThumbnail(oldAvatar.get().getValue())
+                       .setImage(newAvatarUrl);
+            else if(newAvatarUrl != null)
+                builder.setDescription("New avatar:")
+                       .setImage(newAvatarUrl);
+            else
+                builder.setDescription("Unable to log the avatar change.");
+
+            MessageEmbed embed = builder.build();
+            logs.forEach(tc -> log(now, tc, AVATAR, FormatUtil.formatFullUser(event.getUser())+" has changed avatars", embed));
         });
     }
 }

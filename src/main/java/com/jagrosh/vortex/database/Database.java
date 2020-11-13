@@ -37,6 +37,7 @@ public class Database extends DatabaseConnector
     public final InviteWhitelistManager inviteWhitelist;
     public final FilterManager filters;
     public final UsernameHistoryManager usernameHistory;
+    public final AvatarHistoryManager avatarHistory;
     
     public Database(String host, String user, String pass) throws Exception
     {
@@ -55,7 +56,8 @@ public class Database extends DatabaseConnector
         inviteWhitelist = new InviteWhitelistManager(this);
         filters = new FilterManager(this);
         usernameHistory = new UsernameHistoryManager(this);
-        
+        avatarHistory = new AvatarHistoryManager(this);
+
         init();
     }
 }

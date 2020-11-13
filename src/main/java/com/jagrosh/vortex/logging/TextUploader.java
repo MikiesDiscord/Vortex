@@ -20,7 +20,11 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
+
+import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +64,14 @@ public class TextUploader
             }
         });
         index++;
+    }
+
+    public String uploadBytes(byte[] content, String filename) throws ExecutionException, InterruptedException
+    {
+
+        CompletableFuture<ReadonlyMessage> future = webhooks.get(index % webhooks.size()).send(content, filename);
+        index++;
+        return future.get().getAttachments().get(0).getUrl();
     }
     
     

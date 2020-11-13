@@ -36,7 +36,7 @@ import java.util.List;
 public class AvatarHistoryManager extends DataManager
 {
     public static final SQLColumn<Long> USER_ID = new LongColumn("USER_ID", false, 0);
-    public static final SQLColumn<String> AVATAR_URL = new StringColumn("AVATAR_URL", false, "https://cdn.discordapp.com/embed/avatars/0.png", 128);
+    public static final SQLColumn<String> AVATAR_URL = new StringColumn("AVATAR_URL", false, "'https://cdn.discordapp.com/embed/avatars/0.png'", 128);
     public static final SQLColumn<Instant> DATE = new InstantColumn("DATE", false, Instant.EPOCH);
 
     public AvatarHistoryManager(DatabaseConnector connector)
