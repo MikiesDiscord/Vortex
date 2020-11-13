@@ -49,8 +49,7 @@ public class AvatarlogCmd extends LogCommand
     @Override
     protected void setLogChannel(CommandEvent event, TextChannel tc)
     {
-        // TODO make avatarlog Pro-exclusive once avatarlog overhaul is done
-        if(vortex.getDatabase().premium.getPremiumInfo(event.getGuild()).level.isAtLeast(PremiumManager.Level.PLUS))
+        if(vortex.getDatabase().premium.getPremiumInfo(event.getGuild()).level.isAtLeast(PremiumManager.Level.PRO))
         {
             vortex.getDatabase().settings.setAvatarLogChannel(event.getGuild(), tc);
             if(tc==null)
