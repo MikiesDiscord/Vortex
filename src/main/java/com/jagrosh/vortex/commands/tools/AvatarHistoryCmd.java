@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jagrosh.vortex.commands.moderation;
+package com.jagrosh.vortex.commands.tools;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jdautilities.menu.Paginator;
@@ -39,11 +40,13 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Michaili K (mysteriouscursor+git@protonmail.com)
  */
-public class AvatarHistoryCmd extends ModCommand
+public class AvatarHistoryCmd extends Command
 {
+    private final Vortex vortex;
+
     public AvatarHistoryCmd(Vortex vortex)
     {
-        super(vortex, Permission.BAN_MEMBERS);
+        this.vortex = vortex;
         this.name = "avatarhistory";
         this.arguments = "<user>";
         this.help = "sees the avatar history from a user";

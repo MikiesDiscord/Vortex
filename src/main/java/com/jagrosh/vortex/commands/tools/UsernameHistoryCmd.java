@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jagrosh.vortex.commands.moderation;
+package com.jagrosh.vortex.commands.tools;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jdautilities.menu.Paginator;
@@ -41,15 +42,16 @@ import java.util.stream.Collectors;
  *
  * @author Michaili K (mysteriouscursor+git@protonmail.com)
  */
-public class UsernameHistoryCmd extends ModCommand
+public class UsernameHistoryCmd extends Command
 {
+    private final Vortex vortex;
     public UsernameHistoryCmd(Vortex vortex)
     {
-        super(vortex, Permission.BAN_MEMBERS);
+        this.vortex = vortex;
         this.name = "usernamehistory";
         this.arguments = "<user>";
         this.help = "sees the name history from a user";
-        this.aliases = new String[] {"usernames", "namehistory"};
+        this.aliases = new String[] {"usernames", "namehistory", "names"};
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
     }
     

@@ -41,7 +41,6 @@ import com.jagrosh.vortex.logging.ModLogger;
 import com.jagrosh.vortex.logging.TextUploader;
 import com.jagrosh.vortex.utils.FormatUtil;
 import com.jagrosh.vortex.utils.MultiBotManager;
-import com.jagrosh.vortex.utils.MultiBotManager.MultiBotManagerBuilder;
 import com.jagrosh.vortex.utils.OtherUtil;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -52,7 +51,6 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
@@ -128,8 +126,6 @@ public class Vortex
                             new StrikeCmd(this),
                             new PardonCmd(this),
                             new CheckCmd(this),
-                            new UsernameHistoryCmd(this),
-                            new AvatarHistoryCmd(this),
                             new ReasonCmd(this),
                             new SlowmodeCmd(this),
 
@@ -170,6 +166,8 @@ public class Vortex
                             new ExportCmd(this),
                             new InvitepruneCmd(this),
                             new LookupCmd(this),
+                            new UsernameHistoryCmd(this),
+                            new AvatarHistoryCmd(this),
 
                             // Owner
                             new EvalCmd(this),
