@@ -185,7 +185,7 @@ public class Vortex
                                     event.getMessage().addReaction(Constants.HELP_REACTION).queue(s->{}, f->{});
                                 } catch(PermissionException ignore) {}
                         }, t -> event.replyWarning("Help cannot be sent because you are blocking Direct Messages.")))
-                        .setDiscordBotsKey(config.getString("listing.discord-bots"))
+                        //.setDiscordBotsKey(config.getString("listing.discord-bots"))
                         //.setCarbonitexKey(config.getString("listing.carbon"))
                         .build();
         MessageAction.setDefaultMentions(Arrays.asList(Message.MentionType.EMOTE, Message.MentionType.CHANNEL));
