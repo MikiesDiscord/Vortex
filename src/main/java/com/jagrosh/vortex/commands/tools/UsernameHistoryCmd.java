@@ -58,11 +58,6 @@ public class UsernameHistoryCmd extends Command
     @Override
     protected void execute(CommandEvent event)
     {
-        if(!vortex.getDatabase().premium.getPremiumInfo(event.getGuild()).level.isAtLeast(PremiumManager.Level.PRO))
-        {
-            event.reply(PremiumManager.Level.PRO.getRequirementMessage());
-            return;
-        }
         if(event.getArgs().isEmpty() || event.getArgs().equalsIgnoreCase("help"))
         {
             event.replySuccess("This command is used to see a user's past names. Please include a user or user ID to check.");
