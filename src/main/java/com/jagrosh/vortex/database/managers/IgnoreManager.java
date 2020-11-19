@@ -57,10 +57,7 @@ public class IgnoreManager extends DataManager
 
     public void setIgnoresJson(Guild guild, JSONArray json)
     {
-        // delete/unignore all ignored channels & roles first
-        getIgnoredChannels(guild).forEach(channel -> unignore(channel));
-        getIgnoredRoles(guild).forEach(role -> unignore(role));
-
+        unignoreAll(guild);
         json.forEach(id -> {
             TextChannel channel = guild.getTextChannelById((long) id);
             Role role = guild.getRoleById((long) id);

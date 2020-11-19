@@ -192,9 +192,7 @@ public class PunishmentManager extends DataManager
 
     public void setAllPunishmentsJson(Guild guild, JSONObject json)
     {
-        // remove all current punishments first
-        getAllPunishments(guild).stream().map(x -> x.numStrikes).forEach(strike -> removeAction(guild, strike));
-
+        removeAllActions(guild);
         json.keySet().forEach(strikes -> {
             JSONObject action = json.getJSONObject(strikes);
             setAction(guild,

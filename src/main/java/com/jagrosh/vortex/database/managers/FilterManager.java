@@ -101,9 +101,7 @@ public class FilterManager extends DataManager
 
     public void setFiltersJson(Guild guild, JSONObject json)
     {
-        // remove all filters first
         deleteAllFilters(guild.getIdLong());
-
         json.keySet().forEach(name -> {
             JSONObject filterJson = json.getJSONObject(name);
             addFilter(guild,
