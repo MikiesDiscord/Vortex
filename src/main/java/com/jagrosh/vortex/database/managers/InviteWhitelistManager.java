@@ -148,9 +148,7 @@ public class InviteWhitelistManager extends DataManager
 
     public void setWhiteListJson(Guild guild, JSONArray json)
     {
-        // remove all entries on whitelist first
-        removeAllFromWhitelist(guild, readWhitelist(guild));
-
+        removeAll(guild);
         addAllToWhitelist(guild, json.toList().stream().map(x -> (long) x).collect(Collectors.toList()));
     }
 
