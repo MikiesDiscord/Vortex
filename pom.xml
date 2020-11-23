@@ -64,6 +64,11 @@
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.kilianB</groupId>
+            <artifactId>JImageHash</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
     
     <build>
