@@ -57,9 +57,9 @@ public class AvatarHistoryCmd extends Command
     @Override
     protected void execute(CommandEvent event)
     {
-        if(!vortex.getDatabase().premium.getPremiumInfo(event.getGuild()).level.isAtLeast(PremiumManager.Level.PRO))
+        if(!vortex.getDatabase().premium.getPremiumInfo(event.getGuild()).level.isAtLeast(PremiumManager.Level.PLUS))
         {
-            event.reply(PremiumManager.Level.PRO.getRequirementMessage());
+            event.reply(PremiumManager.Level.PLUS.getRequirementMessage());
             return;
         }
         if(event.getArgs().isEmpty() || event.getArgs().equalsIgnoreCase("help"))
