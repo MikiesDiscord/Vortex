@@ -22,6 +22,7 @@ import com.jagrosh.vortex.utils.LogUtil;
 import com.jagrosh.vortex.utils.Usage;
 import com.typesafe.config.Config;
 import java.awt.Color;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -63,12 +64,14 @@ public class BasicLogger
     
     private final Vortex vortex;
     private final AvatarSaver avatarSaver;
+    private final AttachmentCache attachmentCache;
     private final Usage usage = new Usage();
     
-    public BasicLogger(Vortex vortex, Config config)
+    public BasicLogger(Vortex vortex, Config config, AttachmentCache attachmentCache)
     {
         this.vortex = vortex;
         this.avatarSaver = new AvatarSaver(config);
+        this.attachmentCache = attachmentCache;
     }
     
     public Usage getUsage()
@@ -96,6 +99,26 @@ public class BasicLogger
             usage.increment(tc.getGuild().getIdLong());
             tc.sendMessage(FormatUtil.filterEveryone(LogUtil.basiclogFormat(now, vortex.getDatabase().settings.getSettings(tc.getGuild()).getTimezone(), emote, message)))
                     .addFile(file, filename).queue();
+        }
+        catch(PermissionException ignore) {}
+    }
+
+    private void logFile(OffsetDateTime now, TextChannel tc, String emote, String message, MessageEmbed embed, AttachmentCache.CachedAttachments attachments)
+    {
+        try
+        {
+            usage.increment(tc.getGuild().getIdLong());
+            tc.sendMessage(FormatUtil.filterEveryone(LogUtil.basiclogFormat(now, vortex.getDatabase().settings.getSettings(tc.getGuild()).getTimezone(), emote, message)))
+                    .embed(embed)
+                    // For now, we're just going to send the first attachment.
+                    .addFile(attachments.attachments.stream().findFirst().get())
+                    .queue(s -> {
+                        try
+                        {
+                            attachmentCache.deleteAttachment(attachments);
+                        }
+                        catch (IOException ignored) {}
+                    });
         }
         catch(PermissionException ignore) {}
     }
@@ -150,7 +173,12 @@ public class BasicLogger
                 .appendDescription(formatted);
         User author = oldMessage.getAuthor(vortex.getShardManager());
         String user = author==null ? FormatUtil.formatCachedMessageFullUser(oldMessage) : FormatUtil.formatFullUser(author);
-        log(OffsetDateTime.now(), tc, DELETE, user+"'s message has been deleted from "+mtc.getAsMention()+":", delete.build());
+
+        AttachmentCache.CachedAttachments attachments = attachmentCache.getCachedAttachment(oldMessage.getIdLong());
+        if(attachments == null)
+            log(OffsetDateTime.now(), tc, DELETE, user+"'s message has been deleted from "+mtc.getAsMention()+":", delete.build());
+        else
+            logFile(OffsetDateTime.now(), tc, DELETE, user+"'s message has been deleted from "+mtc.getAsMention()+" with an attachment:", delete.build(), attachments);
     }
     
     public void logMessageBulkDelete(List<CachedMessage> messages, int count, TextChannel text)

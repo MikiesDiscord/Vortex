@@ -15,7 +15,10 @@
  */
 package com.jagrosh.vortex;
 
+import com.jagrosh.vortex.database.managers.PremiumManager;
 import com.jagrosh.vortex.logging.MessageCache.CachedMessage;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -71,6 +74,19 @@ public class Listener implements EventListener
                 
                 // Run automod on the message
                 vortex.getAutoMod().performAutomod(m);
+
+                // Store any attachments if server has Vortex Pro
+                if (vortex.getDatabase().premium.getPremiumInfo(m.getGuild()).level.isAtLeast(PremiumManager.Level.PRO))
+                    vortex.getThreadpool().execute(() -> {
+                        try
+                        {
+                            vortex.getAttachmentCache().downloadAttachmentsOfMessage(m);
+                        }
+                        catch (IOException e)
+                        {
+                            LOG.error("Saving attachments for " + m.getIdLong() + " failed.", e);
+                        }
+                    });
             }
         }
         else if (event instanceof GuildMessageUpdateEvent)
