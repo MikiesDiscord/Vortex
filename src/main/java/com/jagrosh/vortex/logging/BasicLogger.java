@@ -115,17 +115,32 @@ public class BasicLogger
         try
         {
             usage.increment(tc.getGuild().getIdLong());
-            tc.sendMessage(FormatUtil.filterEveryone(LogUtil.basiclogFormat(now, vortex.getDatabase().settings.getSettings(tc.getGuild()).getTimezone(), emote, message)))
-                    .embed(embed)
-                    // For now, we're just going to send the first attachment.
-                    .addFile(attachments.attachments.stream().findFirst().get())
-                    .queue(s -> {
-                        try
-                        {
-                            attachmentCache.deleteAttachment(attachments);
-                        }
-                        catch (IOException ignored) {}
-                    });
+            if(attachments.attachments.isEmpty())
+                tc.sendMessage(FormatUtil.filterEveryone(LogUtil.basiclogFormat(now, vortex.getDatabase().settings.getSettings(tc.getGuild()).getTimezone(), emote, message)))
+                        .embed(embed)
+                        .queue(s -> {
+                            try
+                            {
+                                attachmentCache.deleteAttachment(attachments);
+                            }
+                            catch (IOException ignored)
+                            {
+                            }
+                        });
+            else
+                tc.sendMessage(FormatUtil.filterEveryone(LogUtil.basiclogFormat(now, vortex.getDatabase().settings.getSettings(tc.getGuild()).getTimezone(), emote, message)))
+                        .embed(embed)
+                        // For now, we're just going to send the first attachment.
+                        .addFile(attachments.attachments.stream().findFirst().get())
+                        .queue(s -> {
+                            try
+                            {
+                                attachmentCache.deleteAttachment(attachments);
+                            }
+                            catch (IOException ignored)
+                            {
+                            }
+                        });
         }
         catch(PermissionException ignore) {}
     }
