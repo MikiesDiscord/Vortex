@@ -48,9 +48,14 @@ public class DebugCmd extends Command
     {
         long totalMb = Runtime.getRuntime().totalMemory()/(1024*1024);
         long usedMb = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1024*1024);
+
+        long totalAttachmentCacheMb = vortex.getAttachmentCache().maxCacheSize/(1024*1024);
+        long currentAttachmentCacheMb = vortex.getAttachmentCache().getCurrentCacheSize()/(1024*1024);
+
         StringBuilder sb = new StringBuilder("**"+event.getSelfUser().getName()+"** statistics:"
                 + "\nLast Startup: "+FormatUtil.secondsToTime(Constants.STARTUP.until(OffsetDateTime.now(), ChronoUnit.SECONDS))+" ago"
-                + "\nMemory: **"+usedMb+"**Mb / **"+totalMb+"**Mb\n");
+                + "\nMemory: **"+usedMb+"**Mb / **"+totalMb+"**Mb"
+                + "\nAttachment Cache: **"+currentAttachmentCacheMb+"**Mb / **"+totalAttachmentCacheMb+"**Mb\n");
         vortex.getShardManager().getShardManagers().forEach(bot -> 
         //Stream.of(vortex.getShardManager()).forEach(bot -> 
         {

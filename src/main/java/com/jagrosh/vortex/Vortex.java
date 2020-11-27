@@ -33,12 +33,10 @@ import com.jagrosh.vortex.automod.AutoMod;
 import com.jagrosh.vortex.automod.StrikeHandler;
 import com.jagrosh.vortex.commands.CommandExceptionListener;
 import java.util.concurrent.ScheduledExecutorService;
+
+import com.jagrosh.vortex.logging.*;
 import net.dv8tion.jda.api.OnlineStatus;
 import com.jagrosh.vortex.database.Database;
-import com.jagrosh.vortex.logging.BasicLogger;
-import com.jagrosh.vortex.logging.MessageCache;
-import com.jagrosh.vortex.logging.ModLogger;
-import com.jagrosh.vortex.logging.TextUploader;
 import com.jagrosh.vortex.utils.FormatUtil;
 import com.jagrosh.vortex.utils.MultiBotManager;
 import com.jagrosh.vortex.utils.OtherUtil;
@@ -68,6 +66,7 @@ public class Vortex
     private final ModLogger modlog;
     private final BasicLogger basiclog;
     private final MessageCache messages;
+    private final AttachmentCache attachments;
     private final WebhookClient logwebhook;
     private final AutoMod automod;
     private final StrikeHandler strikehandler;
@@ -84,8 +83,9 @@ public class Vortex
                                        config.getString("database.password"));
         uploader = new TextUploader(config.getStringList("upload-webhooks"));
         modlog = new ModLogger(this);
-        basiclog = new BasicLogger(this, config);
         messages = new MessageCache();
+        attachments = new AttachmentCache(config);
+        basiclog = new BasicLogger(this, config, attachments);
         logwebhook = new WebhookClientBuilder(config.getString("webhook-url")).build();
         automod = new AutoMod(this, config);
         strikehandler = new StrikeHandler(this);
@@ -257,6 +257,11 @@ public class Vortex
     public MessageCache getMessageCache()
     {
         return messages;
+    }
+
+    public AttachmentCache getAttachmentCache()
+    {
+        return attachments;
     }
     
     public WebhookClient getLogWebhook()
