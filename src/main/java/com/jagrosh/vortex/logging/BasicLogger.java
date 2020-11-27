@@ -77,9 +77,8 @@ public class BasicLogger
     public BasicLogger(Vortex vortex, Config config, AttachmentCache attachmentCache)
     {
         this.vortex = vortex;
-        this.avatarSaver = new AvatarSaver(config);
-        this.attachmentCache = attachmentCache;
         this.avatarSaver = new AvatarSaver(config, vortex);
+        this.attachmentCache = attachmentCache;
     }
     
     public Usage getUsage()
