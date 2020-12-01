@@ -75,8 +75,8 @@ public class Listener implements EventListener
                 // Run automod on the message
                 vortex.getAutoMod().performAutomod(m);
 
-                // Store any attachments if server has Vortex Pro
-                if (vortex.getDatabase().premium.getPremiumInfo(m.getGuild()).level.isAtLeast(PremiumManager.Level.PRO))
+                // Store any attachments if server has Vortex Plus
+                if (vortex.getDatabase().premium.getPremiumInfo(m.getGuild()).level.isAtLeast(PremiumManager.Level.PLUS))
                     vortex.getThreadpool().execute(() -> {
                         try
                         {
