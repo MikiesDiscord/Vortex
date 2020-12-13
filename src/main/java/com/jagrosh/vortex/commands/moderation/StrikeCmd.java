@@ -34,6 +34,8 @@ import net.dv8tion.jda.api.entities.User;
  */
 public class StrikeCmd extends ModCommand
 {
+    protected boolean silent = false;
+
     public StrikeCmd(Vortex vortex)
     {
         super(vortex, Permission.BAN_MEMBERS);
@@ -135,7 +137,7 @@ public class StrikeCmd extends ModCommand
                 builder.append("\n").append(event.getClient().getError()).append(" Strikes cannot be given to bots (").append(FormatUtil.formatFullUser(u)).append(")");
             else
             {
-                vortex.getStrikeHandler().applyStrikes(event.getMember(), event.getMessage().getTimeCreated(), u, numstrikes, reason);
+                vortex.getStrikeHandler().applyStrikes(event.getMember(), event.getMessage().getTimeCreated(), u, numstrikes, reason, silent);
                 builder.append("\n").append(event.getClient().getSuccess()).append(" Successfully gave `").append(numstrikes)
                         .append("` strikes to ").append(FormatUtil.formatUser(u));
             }

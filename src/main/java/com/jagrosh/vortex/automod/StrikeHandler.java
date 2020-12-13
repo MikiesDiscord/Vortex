@@ -51,7 +51,7 @@ public class StrikeHandler
         this.vortex = vortex;
     }
     
-    public void pardonStrikes(Member moderator, OffsetDateTime nowo, long targetId, int number, String reason)
+    public void pardonStrikes(Member moderator, OffsetDateTime nowo, long targetId, int number, String reason, boolean silent)
     {
         int[] counts = vortex.getDatabase().strikes.removeStrikes(moderator.getGuild(), targetId, number);
         User user = vortex.getShardManager().getUserById(targetId);
@@ -63,11 +63,12 @@ public class StrikeHandler
         {
             String dmmsg = String.format(PARDON_FORMAT, number, moderator.getGuild().getName(), reason);
             vortex.getModLogger().postPardonCase(moderator, nowo, number, counts[0], counts[1], user, reason);
-            OtherUtil.safeDM(user, dmmsg, moderator.getGuild().getMemberById(targetId)!=null, ()->{});
+            if(!silent)
+                OtherUtil.safeDM(user, dmmsg, moderator.getGuild().getMemberById(targetId)!=null, ()->{});
         }
     }
     
-    public void applyStrikes(Member moderator, OffsetDateTime nowo, User target, int number, String reason)
+    public void applyStrikes(Member moderator, OffsetDateTime nowo, User target, int number, String reason, boolean silent)
     {
         boolean isMember = moderator.getGuild().getMemberById(target.getIdLong())!=null;
         Instant now = nowo.toInstant();
@@ -79,7 +80,8 @@ public class StrikeHandler
         if(punishments.isEmpty())
         {
             vortex.getModLogger().postStrikeCase(moderator, nowo, number, counts[0], counts[1], target, reason);
-            OtherUtil.safeDM(target, dmmsg, isMember, ()->{});
+            if(!silent)
+                OtherUtil.safeDM(target, dmmsg, isMember, ()->{});
         }
         else
         {

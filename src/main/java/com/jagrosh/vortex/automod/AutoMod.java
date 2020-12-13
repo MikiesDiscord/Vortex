@@ -463,7 +463,7 @@ public class AutoMod
         if(strikeTotal>0)
         {
             vortex.getStrikeHandler().applyStrikes(message.getGuild().getSelfMember(), 
-                    latestTime(message), message.getAuthor(), strikeTotal, reason.toString().substring(2));
+                    latestTime(message), message.getAuthor(), strikeTotal, reason.toString().substring(2), false);
         }
         
         // now, lets resolve links, but async
@@ -513,7 +513,7 @@ public class AutoMod
                             message.delete().reason("Automod").queue(v->{}, f->{});
                         }catch(PermissionException ignore){}
                         vortex.getStrikeHandler().applyStrikes(message.getGuild().getSelfMember(), 
-                            latestTime(message), message.getAuthor(), rstrikeTotal, rreason);
+                            latestTime(message), message.getAuthor(), rstrikeTotal, rreason, false);
                     }
                 });
         }

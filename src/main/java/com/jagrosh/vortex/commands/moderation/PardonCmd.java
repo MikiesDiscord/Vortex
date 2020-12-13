@@ -29,6 +29,8 @@ import net.dv8tion.jda.api.Permission;
  */
 public class PardonCmd extends ModCommand
 {
+    protected boolean silent = false;
+
     public PardonCmd(Vortex vortex)
     {
         super(vortex, Permission.BAN_MEMBERS);
@@ -99,7 +101,7 @@ public class PardonCmd extends ModCommand
             else
             {
                 strikes = fnumstrikes<strikes ? fnumstrikes : strikes;
-                vortex.getStrikeHandler().pardonStrikes(event.getMember(), event.getMessage().getTimeCreated(), id, strikes, args.reason);
+                vortex.getStrikeHandler().pardonStrikes(event.getMember(), event.getMessage().getTimeCreated(), id, strikes, args.reason, silent);
                 builder.append("\n").append(event.getClient().getSuccess()).append(" Successfully pardoned `").append(strikes).append("` strikes from ").append(user);
             }
         });
