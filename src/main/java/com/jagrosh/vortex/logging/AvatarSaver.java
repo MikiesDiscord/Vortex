@@ -46,36 +46,45 @@ public class AvatarSaver
     }
 
     @Nullable
-    public String saveAvatar(User user) throws IOException, ExecutionException, InterruptedException
+    public String saveAvatar(User user) throws Exception
     {
-
         if(user.getAvatarId() == null)
             return user.getDefaultAvatarUrl();
 
-
-        for(int imageSize = 1024; imageSize > 128; imageSize /= 2)
+        int attempts = 0;
+        while(true)
         {
-            URLConnection connection = new URL(user.getEffectiveAvatarUrl() + "?size=" + imageSize).openConnection();
-            connection.setRequestProperty("user-agent", userAgent);
-            connection.connect();
-
-            if(connection.getContentLengthLong() > MaxFileSize && connection.getContentLengthLong() != -1)
-                continue;
-
-            boolean isAnimated = connection.getContentType().equals("image/gif");
-
-
-            InputStream inputStream = connection.getInputStream();
-            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-            while(true)
+            try
             {
-                int result = inputStream.read();
-                if (result == -1) break;
-                byteArray.write(result);
-            }
-            return bot.getTextUploader().uploadBytes(byteArray.toByteArray(), user.getAvatarId() + (isAnimated ? ".gif" : ".png"));
-        }
+                attempts++;
+                for (int imageSize = 1024; imageSize > 128; imageSize /= 2)
+                {
+                    URLConnection connection = new URL(user.getEffectiveAvatarUrl() + "?size=" + imageSize).openConnection();
+                    connection.setRequestProperty("user-agent", userAgent);
+                    connection.connect();
 
-        return null;
+                    if (connection.getContentLengthLong() > MaxFileSize && connection.getContentLengthLong() != -1)
+                        continue;
+
+                    boolean isAnimated = connection.getContentType().equals("image/gif");
+
+
+                    InputStream inputStream = connection.getInputStream();
+                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                    while (true)
+                    {
+                        int result = inputStream.read();
+                        if (result == -1) break;
+                        byteArray.write(result);
+                    }
+                    return bot.getTextUploader().uploadBytes(byteArray.toByteArray(), user.getAvatarId() + (isAnimated ? ".gif" : ".png"));
+                }
+            }
+            catch(Exception e)
+            {
+                if(attempts >= 3)
+                    throw e;
+            }
+        }
     }
 }

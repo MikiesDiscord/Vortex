@@ -372,12 +372,15 @@ public class BasicLogger
             }
 
             Optional<Pair<Instant, String>> oldAvatar = vortex.getDatabase().avatarHistory.getPastAvatars(event.getUser()).stream().findFirst();
-            vortex.getDatabase().avatarHistory.addAvatar(event.getUser().getIdLong(), now.toInstant(), newAvatarUrl);
+
+            if(newAvatarUrl != null)
+                vortex.getDatabase().avatarHistory.addAvatar(event.getUser().getIdLong(), now.toInstant(), newAvatarUrl);
 
             List<TextChannel> logs = event.getUser().getMutualGuilds().stream()
                     .map(guild -> vortex.getDatabase().settings.getSettings(guild).getAvatarLogChannel(guild))
                     .filter(tc -> tc!=null)
                     .collect(Collectors.toList());
+
             if(logs.isEmpty())
                 return;
 
