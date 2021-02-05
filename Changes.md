@@ -5,7 +5,6 @@
 the export command (Bot owner only).
 - Added reset command, which allows you to reset settings of Vortex
 - Added Username & Avatar History commands, which allows you to see a user's past names & avatars.
-- Enabled whitelist command.
 - Modified premium command (Bot owner only)
 - Modified the about & invite commands.
 - Removed announce command, as it is useless now that members with @everyone

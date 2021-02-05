@@ -145,7 +145,7 @@ public class Vortex
                             new SettingsCmd(this),
                             new ResetCmd(this),
 
-                            new WhitelistInvitesCmd(this),
+                            //new WhitelistInvitesCmd(this),
 
                             // Automoderation
                             new AntiinviteCmd(this),
