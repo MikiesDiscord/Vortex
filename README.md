@@ -8,15 +8,9 @@ See [Changes.md](https://github.com/MichailiK/Vortex/blob/master/Changes.md),
 where I document all changes
 
 ## [Vortex Wiki](https://github.com/jagrosh/Vortex/wiki)
-ℹ [About Vortex](https://github.com/jagrosh/Vortex/wiki/About-Vortex)  
-🌀 [Getting Started](https://github.com/jagrosh/Vortex/wiki/Getting-Started)  
-🔨 [Moderator Guide](https://github.com/jagrosh/Vortex/wiki/Moderator-Guide)  
-🚩 [Strikes](https://github.com/jagrosh/Vortex/wiki/Strikes)  
-🛡 [Auto-Moderation](https://github.com/jagrosh/Vortex/wiki/Auto-Moderation)  
-🌟 [Vortex Pro](https://github.com/jagrosh/Vortex/wiki/Vortex-Pro)  
-📜 [Full Command Reference](https://github.com/jagrosh/Vortex/wiki/Commands)  
-⚠ [Troubleshooting](https://github.com/jagrosh/Vortex/wiki/Troubleshooting)  
-📥 [Support Server](https://discord.gg/0p9LSGoRLu6Pet0k)
+You may find the [Vortex wiki here](https://github.com/jagrosh/Vortex/wiki). Note that this is the upstream wiki, be sure to check out the [Changes.md](https://github.com/MichailiK/Vortex/blob/master/Changes.md).
+
+You may also want to join my [(support) server here](https://discord.gg/3aXRRSTddc).
 
 
 ## How do I report a bug or suggest a feature?
