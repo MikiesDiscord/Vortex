@@ -125,7 +125,7 @@ public class LookupCmd extends Command
             return false;
         String text = (u.isBot() ? BOT_EMOJI : USER_EMOJI) + " Information about **" + u.getName() + "**#" + u.getDiscriminator() + ":";
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setThumbnail(u.getEffectiveAvatarUrl());
+        eb.setThumbnail(u.getEffectiveAvatarUrl() + "?size=1024");
         StringBuilder str = new StringBuilder(LINESTART + "Discord ID: **" + u.getId() + "** ");
         u.getFlags().forEach(flag -> str.append(OtherUtil.getEmoji(flag)));
         if(u.getAvatarId() != null && u.getAvatarId().startsWith("a_"))
@@ -241,7 +241,7 @@ public class LookupCmd extends Command
         if(invite != null)
         {
             Invite.Guild g = invite.getGuild();
-            eb.setThumbnail(g.getIconUrl());
+            eb.setThumbnail(g.getIconUrl() + "?size=1024");
             eb.setImage(g.getSplashId() == null ? null : g.getSplashUrl() + "?size=1024");
             eb.addField("Invite Info", LINESTART + "Invite: **" + invite.getCode() + "**"
                     + "\n" + LINESTART + "Channel: **" + (invite.getChannel().getType() == ChannelType.TEXT ? "#" : "") + invite.getChannel().getName() + "** (ID:" +invite.getChannel().getId() + ")"

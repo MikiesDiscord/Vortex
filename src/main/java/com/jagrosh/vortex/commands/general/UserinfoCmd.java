@@ -126,7 +126,7 @@ public class UserinfoCmd extends Command
                 .append(FormatUtil.filterEveryone(title))
                 .setEmbed(new EmbedBuilder()
                         .setDescription(str.toString())
-                        .setThumbnail(user.getEffectiveAvatarUrl())
+                        .setThumbnail(user.getEffectiveAvatarUrl() + "?size=1024")
                         .setColor(member.getColor()).build())
                 .build());
     }
