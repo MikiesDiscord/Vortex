@@ -15,6 +15,7 @@
  */
 package com.jagrosh.vortex.logging;
 
+import com.jagrosh.vortex.Emoji;
 import com.jagrosh.vortex.Vortex;
 import com.jagrosh.vortex.logging.MessageCache.CachedMessage;
 import com.jagrosh.vortex.utils.FormatUtil;
@@ -255,12 +256,13 @@ public class BasicLogger
     
     
     // Server Logs
-    
+    // Name change logs need to be handled specially because they are not guild-specific events, but only one
+    // bot (pro vs normal) should ever log them.
     public void logNameChange(UserUpdateNameEvent event)
     {
         OffsetDateTime now = OffsetDateTime.now();
         vortex.getDatabase().usernameHistory.addUsername(event);
-        event.getUser().getMutualGuilds().stream()
+        vortex.getShardManager().getMutualGuilds(event.getUser().getIdLong()).stream()
             .map(guild -> vortex.getDatabase().settings.getSettings(guild).getServerLogChannel(guild))
             .filter(tc -> tc!=null)
             .forEachOrdered(tc ->
@@ -274,7 +276,7 @@ public class BasicLogger
     {
         OffsetDateTime now = OffsetDateTime.now();
         vortex.getDatabase().usernameHistory.addUsername(event);
-        event.getUser().getMutualGuilds().stream()
+        vortex.getShardManager().getMutualGuilds(event.getUser().getIdLong()).stream()
             .map(guild -> vortex.getDatabase().settings.getSettings(guild).getServerLogChannel(guild))
             .filter(tc -> tc!=null)
             .forEachOrdered(tc ->
@@ -331,7 +333,7 @@ public class BasicLogger
         TextChannel tc = vortex.getDatabase().settings.getSettings(event.getGuild()).getVoiceLogChannel(event.getGuild());
         if(tc==null)
             return;
-        log(OffsetDateTime.now(), tc, "<:voicejoin:770310301245505626>", FormatUtil.formatFullUser(event.getMember().getUser())
+        log(OffsetDateTime.now(), tc, Emoji.VOICE_JOIN, FormatUtil.formatFullUser(event.getMember().getUser())
                 +" has joined voice channel _"+event.getChannelJoined().getName()+"_", null);
     }
     
@@ -340,7 +342,7 @@ public class BasicLogger
         TextChannel tc = vortex.getDatabase().settings.getSettings(event.getGuild()).getVoiceLogChannel(event.getGuild());
         if(tc==null)
             return;
-        log(OffsetDateTime.now(), tc, "<:voicechange:770310421655322624>", FormatUtil.formatFullUser(event.getMember().getUser())
+        log(OffsetDateTime.now(), tc, Emoji.VOICE_CHANGE, FormatUtil.formatFullUser(event.getMember().getUser())
                 +" has moved voice channels from _"+event.getChannelLeft().getName()+"_ to _"+event.getChannelJoined().getName()+"_", null);
     }
     
@@ -349,7 +351,7 @@ public class BasicLogger
         TextChannel tc = vortex.getDatabase().settings.getSettings(event.getGuild()).getVoiceLogChannel(event.getGuild());
         if(tc==null)
             return;
-        log(OffsetDateTime.now(), tc, "<:voiceleave:770310520242307132>", FormatUtil.formatFullUser(event.getMember().getUser())
+        log(OffsetDateTime.now(), tc, Emoji.VOICE_LEAVE, FormatUtil.formatFullUser(event.getMember().getUser())
                 +" has left voice channel _"+event.getChannelLeft().getName()+"_", null);
     }
     

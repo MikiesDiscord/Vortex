@@ -77,7 +77,7 @@ public class ModLogger
             }
             if(!toUpdate.isEmpty())
             {
-                LOG.debug("DEBUG Modlog updating " + toUpdate.size() + " guilds: " + toUpdate.toString());
+                LOG.debug("Modlog updating " + toUpdate.size() + " guilds: " + toUpdate.toString());
                 try
                 {
                     long time, diff;
@@ -109,6 +109,16 @@ public class ModLogger
                 needsUpdate.add(guild.getIdLong());
             }
         }, 2, TimeUnit.SECONDS);
+    }
+    
+    public Set<Long> getPending()
+    {
+        Set<Long> toUpdate;
+        synchronized(needsUpdate)
+        {
+            toUpdate = new HashSet<>(needsUpdate);
+        }
+        return toUpdate;
     }
     
     public int updateCase(Guild guild, int num, String reason)
@@ -355,9 +365,9 @@ public class ModLogger
         }
     }
     
-    private static int getCaseNumber(Message m)
+    private int getCaseNumber(Message m)
     {
-        if(m.getAuthor().getIdLong()!=m.getJDA().getSelfUser().getIdLong())
+        if(!vortex.getShardManager().getBotIds().contains(m.getAuthor().getIdLong()))
             return -1;
         if(!m.getContentRaw().startsWith("`["))
             return -1;

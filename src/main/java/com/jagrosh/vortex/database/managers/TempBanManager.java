@@ -20,6 +20,7 @@ import com.jagrosh.easysql.DatabaseConnector;
 import com.jagrosh.easysql.SQLColumn;
 import com.jagrosh.easysql.columns.InstantColumn;
 import com.jagrosh.easysql.columns.LongColumn;
+import com.jagrosh.vortex.utils.MultiBotManager;
 import com.jagrosh.vortex.utils.Pair;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -132,14 +133,14 @@ public class TempBanManager extends DataManager
         });
     }
     
-    public void checkUnbans(JDA jda)
+    public void checkUnbans(MultiBotManager shards)
     {
         readWrite(selectAll(FINISH.isLessThan(Instant.now().getEpochSecond())), rs -> 
         {
             while(rs.next())
             {
-                Guild g = jda.getGuildById(GUILD_ID.getValue(rs));
-                if(g==null || !g.isAvailable() || !g.getSelfMember().hasPermission(Permission.BAN_MEMBERS))
+                Guild g = shards.getGuildById(GUILD_ID.getValue(rs));
+                if(g==null || g.getMemberCache().isEmpty() || !g.getSelfMember().hasPermission(Permission.BAN_MEMBERS))
                     continue;
                 g.unban(Long.toString(USER_ID.getValue(rs))).reason("Temporary Ban Completed").queue(s->{}, f->{});
                 rs.deleteRow();

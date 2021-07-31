@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import com.jagrosh.vortex.database.Database;
 import com.jagrosh.vortex.utils.FormatUtil;
 import com.jagrosh.vortex.utils.MultiBotManager;
+import com.jagrosh.vortex.utils.MultiBotManager.MultiBotManagerBuilder;
 import com.jagrosh.vortex.utils.OtherUtil;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -46,6 +47,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
@@ -76,8 +78,8 @@ public class Vortex
     {
         System.setProperty("config.file", System.getProperty("config.file", "application.conf"));
         Config config = ConfigFactory.load();
-        waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
-        threadpool = Executors.newScheduledThreadPool(100);
+        waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "eventwaiter")), false);
+        threadpool = Executors.newScheduledThreadPool(100, r -> new Thread(r, "vortex"));
         database = new Database(config.getString("database.host"), 
                                        config.getString("database.username"), 
                                        config.getString("database.password"));
@@ -196,27 +198,18 @@ public class Vortex
                 .addBot(config.getString("bot-token"), Constants.INTENTS)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                .disableCache(CacheFlag.EMOTE, CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
+                .disableCache(CacheFlag.EMOTE, CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
                 .addEventListeners(new Listener(this), client, waiter)
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .setActivity(Activity.playing("loading..."))
                 .build();
-        /*shards = DefaultShardManagerBuilder.create(config.getString("bot-token"), Constants.INTENTS)
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                .disableCache(CacheFlag.EMOTE, CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
-                .setShardsTotal(config.getInt("shards-total"))
-                .addEventListeners(new Listener(this), client, waiter)
-                .setStatus(OnlineStatus.DO_NOT_DISTURB)
-                .setActivity(Activity.playing("loading..."))
-                .setBulkDeleteSplittingEnabled(false)
-                .setRequestTimeoutRetry(true)
-                .build();*/
         
         modlog.start();
         
         threadpool.scheduleWithFixedDelay(() -> cleanPremium(), 0, 2, TimeUnit.HOURS);
-        //threadpool.scheduleWithFixedDelay(() -> leavePointlessGuilds(), 5, 30, TimeUnit.MINUTES);
+        threadpool.scheduleWithFixedDelay(() -> database.tempbans.checkUnbans(shards), 0, 2, TimeUnit.MINUTES);
+        threadpool.scheduleWithFixedDelay(() -> database.tempmutes.checkUnmutes(shards, database.settings), 0, 45, TimeUnit.SECONDS);
+        threadpool.scheduleWithFixedDelay(() -> database.tempslowmodes.checkSlowmode(shards), 0, 45, TimeUnit.SECONDS);
     }
     
     
@@ -265,7 +258,7 @@ public class Vortex
     {
         return attachments;
     }
-    
+
     public WebhookClient getLogWebhook()
     {
         return logwebhook;
@@ -295,13 +288,21 @@ public class Vortex
             database.automod.setResolveUrls(gid, false);
             database.settings.setAvatarLogChannel(gid, null);
             database.settings.setVoiceLogChannel(gid, null);
+            database.settings.setServerLogChannel(gid, null);
             database.filters.deleteAllFilters(gid);
+            for(int i = 0; i < shards.size() - 1; i++)
+            {
+                Guild g = shards.getShardManagers().get(i).getGuildById(gid);
+                if (g != null)
+                    g.leave().queue();
+            }
         });
     }
     
     public void leavePointlessGuilds()
     {
-        shards.getShardManagers().stream().flatMap(s -> s.getGuilds().stream()).filter(g -> 
+        //shards.getGuilds().stream().filter(g ->
+        shards.getShardManagers().stream().flatMap(s -> s.getGuilds().stream()).filter(g ->
         {
             if(!g.isLoaded())
                 return false;

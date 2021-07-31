@@ -28,20 +28,20 @@ public class Constants
 {
     public final static OffsetDateTime STARTUP = OffsetDateTime.now();
     public final static String PREFIX          = ">";
-    public final static String SUCCESS         = "<:vSuccess:764120939645370428>";
-    public final static String WARNING         = "<:vWarning:764120939628986379>";
-    public final static String ERROR           = "<:vError:764120939352686632>";
-    public final static String LOADING         = "<a:typing:764120939645370368>";
+    public final static String SUCCESS         = Emoji.SUCCESS;
+    public final static String WARNING         = Emoji.WARNING;
+    public final static String ERROR           = Emoji.ERROR;
+    public final static String LOADING         = Emoji.LOADING;
     public final static String HELP_REACTION   = SUCCESS.replaceAll("<a?:(.+):(\\d+)>", "$1:$2");
     public final static String ERROR_REACTION  = ERROR.replaceAll("<a?:(.+):(\\d+)>", "$1:$2");
-    public final static String VORTEX_EMOJI    = "<:Vortex:764120939695702066>";
-    public final static int DEFAULT_CACHE_SIZE = 8000;
+    public final static String VORTEX_EMOJI    = Emoji.VORTEX;
+    public final static int DEFAULT_CACHE_SIZE = 10000;
     public final static Permission[] PERMISSIONS = {Permission.ADMINISTRATOR, Permission.BAN_MEMBERS, Permission.KICK_MEMBERS, Permission.MANAGE_ROLES,
                                         Permission.MANAGE_SERVER, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_READ,
                                         Permission.MESSAGE_WRITE,Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_HISTORY, Permission.MESSAGE_EXT_EMOJI,
                                         Permission.MESSAGE_MANAGE, Permission.VOICE_CONNECT, Permission.VOICE_MOVE_OTHERS, Permission.VOICE_DEAF_OTHERS, 
                                         Permission.VOICE_MUTE_OTHERS, Permission.NICKNAME_CHANGE, Permission.NICKNAME_MANAGE, Permission.VIEW_AUDIT_LOGS};
-    public final static EnumSet<GatewayIntent> INTENTS = EnumSet.of(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_INVITES,
+    public final static EnumSet<GatewayIntent> INTENTS = EnumSet.of(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_INVITES, 
                                         GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES);
     public final static String SERVER_INVITE = "https://discord.gg/3aXRRSTddc";
     //public final static String BOT_INVITE  = "https://discordapp.com/oauth2/authorize?client_id=240254129333731328&scope=bot&permissions="+Permission.getRaw(PERMISSIONS);
@@ -62,5 +62,6 @@ public class Constants
         public final static String RAID_MODE    = WIKI_BASE + "/Raid-Mode";
         public final static String COMMANDS     = WIKI_BASE + "/Commands";
         public final static String AUTOMOD      = WIKI_BASE + "/Auto-Moderation";
+        public final static String VORTEX_PRO   = WIKI_BASE + "/Vortex-Pro";
     }
 }

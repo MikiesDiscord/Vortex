@@ -154,9 +154,9 @@ public class PremiumManager extends DataManager
     public static enum Level
     {
         NONE("No Premium"),
-        PLUS("Vortex Plus"),
+        PLUS("Vortex Pro Lite"),
         PRO("Vortex Pro"),
-        ULTRA("Vortex Ultra");
+        ULTRA("Vortex Experimental");
         
         public final String name;
         
